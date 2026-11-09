@@ -182,105 +182,24 @@ PAGE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebStrike - Website Security Checker</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f8; color: #222; }
-        .container { width: 92%; max-width: 900px; margin: 32px auto; }
-        .top { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:22px; }
-        .top h1 { margin:0; color:#244b70; font-size:28px; }
-        .top p { margin:5px 0 0; color:#626b75; }
-        .nav a { display:inline-block; margin-left:8px; padding:10px 13px; border:1px solid #cbd5df; border-radius:5px; color:#244b70; text-decoration:none; background:#fff; }
-        .nav a:hover { background:#eaf1f7; }
-        .panel { background:#fff; border:1px solid #d9e0e6; border-radius:7px; padding:22px; margin-bottom:17px; }
-        h2 { color:#244b70; font-size:19px; margin:0 0 15px; }
-        form { display:flex; gap:10px; }
-        input { flex:1; min-width:0; padding:12px; border:1px solid #b9c4ce; border-radius:5px; font-size:15px; background:#fff; color:#222; }
-        input:focus { outline:2px solid #b7d3eb; border-color:#477da8; }
-        button { padding:12px 20px; border:1px solid #244b70; border-radius:5px; background:#315f87; color:#fff; font-weight:bold; cursor:pointer; }
-        button:hover { background:#244b70; }
-        .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-        .item { background:#f8fafb; border:1px solid #e0e5e9; border-radius:5px; padding:13px; }
-        .label { color:#626b75; font-size:13px; margin-bottom:6px; }
-        .value { font-weight:bold; overflow-wrap:anywhere; }
-        .good { color:#267044; } .bad { color:#a15a16; }
-        .header-row { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid #e2e6ea; padding:10px 0; }
-        .error { background:#fff1f0; color:#9d2d25; border:1px solid #edc7c3; border-radius:5px; padding:12px; margin-top:14px; }
-        .small { color:#68727c; font-size:12px; line-height:1.5; }
-        .last-scan { line-height:1.7; overflow-wrap:anywhere; }
-        .empty { color:#68727c; }
-        @media (max-width:600px) {
-            .top { align-items:flex-start; flex-direction:column; }
-            .nav a { margin:8px 8px 0 0; }
-            form { flex-direction:column; }
-            .grid { grid-template-columns:1fr; }
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="top">
-        <div>
-            <h1>WebStrike</h1>
-            <p>Website Security Checker</p>
-        </div>
-        <nav class="nav">
-            <a href="/">Home</a>
-            <a href="/history">Scan History</a>
-        </nav>
-    </div>
-
-    <div class="panel">
-        <h2>Check a Website</h2>
-        <form method="POST" action="/scan">
-            <input type="text" name="website" placeholder="Enter a website, e.g. example.com" required maxlength="2048">
-            <button type="submit">Check Website</button>
-        </form>
-        {% if error %}<div class="error">{{ error }}</div>{% endif %}
-        <p class="small">Click Check Website whenever you want to run a scan. This tool performs basic checks on public websites; it is not a full security audit.</p>
-    </div>
-
-    <div class="panel">
-        <h2>Last Scan</h2>
-        {% if last_scan %}
-            <div class="last-scan">
-                <strong>{{ last_scan["website"] }}</strong><br>
-                Website status: {{ last_scan["website_status"] }}<br>
-                HTTPS status: {{ last_scan["https_status"] }}<br>
-                <span class="small">Scanned at: {{ last_scan["scanned_at"] }}</span>
-            </div>
-        {% else %}
-            <p class="empty">No scans saved yet. Enter a website above and click Check Website.</p>
-        {% endif %}
-        <p><a href="/history" style="color:#315f87;">View all scan history</a></p>
-    </div>
-
-    {% if result %}
-    <div class="panel">
-        <h2>Current Scan Results</h2>
-        <div class="grid">
-            <div class="item"><div class="label">Website</div><div class="value">{{ result.url }}</div></div>
-            <div class="item"><div class="label">Website Status</div><div class="value">{{ result.website_status }}</div></div>
-            <div class="item"><div class="label">HTTP Response Code</div><div class="value">{{ result.http_code }}</div></div>
-            <div class="item"><div class="label">HTTPS Status</div><div class="value">{{ result.https_status }}</div></div>
-            <div class="item"><div class="label">SSL/TLS Certificate</div><div class="value">{{ result.certificate.status }}</div></div>
-            <div class="item"><div class="label">Certificate Expiry</div><div class="value">{{ result.certificate.expiry }}</div></div>
-        </div>
-        <h2 style="margin-top:22px;">Security Headers</h2>
-        {% for header in result.headers %}
-        <div class="header-row">
-            <span>{{ header.name }}</span>
-            {% if header.present %}<strong class="good">Present</strong>{% else %}<strong class="bad">Missing</strong>{% endif %}
-        </div>
-        {% endfor %}
-        <p class="small">A missing header is not proof that a website is vulnerable. Header requirements depend on the website.</p>
-    </div>
-    {% endif %}
-</div>
-</body>
-</html>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebStrike | Website Security Lab</title>
+<style>
+*{box-sizing:border-box}:root{--bg:#081321;--panel:#101f32;--line:#203750;--cyan:#42d9e8;--muted:#91a5ba;--white:#edf6ff}
+body{margin:0;min-height:100vh;color:var(--white);font-family:Arial,sans-serif;background:#081321;background-image:linear-gradient(#42d9e809 1px,transparent 1px),linear-gradient(90deg,#42d9e809 1px,transparent 1px),radial-gradient(ellipse at 80% 0%,#153451,transparent 42%);background-size:32px 32px,32px 32px,auto}
+.container{width:92%;max-width:1040px;margin:30px auto 55px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:13px}.brand-mark{width:43px;height:43px;display:grid;place-items:center;border:1px solid #2d6276;border-radius:13px;color:var(--cyan);background:#102b40;font-size:23px;box-shadow:0 0 24px #42d9e822}.top h1{margin:0;font-size:27px;letter-spacing:1.5px}.top h1 span{color:var(--cyan)}.top p{margin:5px 0 0;color:var(--muted);font-size:13px;letter-spacing:1px}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav a{padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:#c8d8e8;text-decoration:none;background:#0d1b2b;font-size:13px}.nav a:hover{border-color:var(--cyan);color:var(--cyan)}
+.hero{display:grid;grid-template-columns:1.5fr .8fr;align-items:center;gap:20px;padding:27px;margin-bottom:17px;border:1px solid #24435b;border-radius:15px;background:linear-gradient(120deg,#10253a,#0d1b2b 70%);position:relative;overflow:hidden}.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:2px;font-weight:bold}.hero h2{margin:10px 0;font-size:clamp(24px,4vw,36px);line-height:1.12}.hero p{color:var(--muted);line-height:1.6;max-width:510px;margin:0;font-size:14px}
+.mascot-wrap{display:flex;justify-content:center;align-items:center;min-height:150px;position:relative}.mascot{width:122px;height:105px;position:relative;background:linear-gradient(145deg,#ffe98a,#ffc83d);border:2px solid #f6b92d;border-radius:48% 48% 43% 43%;box-shadow:0 12px 28px #0005;animation:float 3s ease-in-out infinite}.ear{position:absolute;width:24px;height:54px;top:-37px;background:linear-gradient(#ffd95c 72%,#4a3b32 73%);border:2px solid #f2b832;border-radius:90% 15% 50% 50%;z-index:-1}.ear.left{left:10px;transform:rotate(-25deg);animation:earL 4s infinite}.ear.right{right:10px;transform:rotate(25deg) scaleX(-1);animation:earR 4s infinite}.eye{position:absolute;top:39px;width:9px;height:13px;border-radius:50%;background:#263342;animation:blink 4.5s infinite}.eye.left{left:31px}.eye.right{right:31px}.cheek{position:absolute;top:59px;width:19px;height:15px;border-radius:50%;background:#ff795d;box-shadow:0 0 13px #ff795d77}.cheek.left{left:13px}.cheek.right{right:13px}.mouth{position:absolute;left:50%;top:57px;width:13px;height:9px;border-bottom:2px solid #75452d;border-radius:50%;transform:translateX(-50%)}.spark{position:absolute;color:#ffd45a;font-size:24px;animation:spark 1.8s infinite}.spark.one{top:4px;right:4px}.spark.two{bottom:7px;left:3px;animation-delay:.8s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}@keyframes blink{0%,43%,47%,100%{transform:scaleY(1)}45%{transform:scaleY(.12)}}@keyframes earL{0%,85%,100%{transform:rotate(-25deg)}90%{transform:rotate(-39deg)}}@keyframes earR{0%,85%,100%{transform:rotate(25deg) scaleX(-1)}90%{transform:rotate(39deg) scaleX(-1)}}@keyframes spark{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.2) rotate(25deg)}}
+.panel{background:linear-gradient(145deg,#112238,#0e1b2b);border:1px solid var(--line);border-radius:13px;padding:22px;margin-bottom:17px;box-shadow:0 10px 30px #0002}h3{color:var(--white);font-size:17px;margin:0 0 15px}.tag{color:var(--cyan);font-size:10px;letter-spacing:1.7px;margin-bottom:8px;font-weight:bold}form{display:flex;gap:10px}input{flex:1;min-width:0;padding:14px;border:1px solid #2b4962;border-radius:8px;font-size:15px;background:#091727;color:var(--white)}input::placeholder{color:#6f879e}input:focus{outline:2px solid #42d9e855;border-color:var(--cyan)}button{padding:13px 21px;border:1px solid #55e1ec;border-radius:8px;background:linear-gradient(120deg,#1d9fb4,#16788f);color:#04131e;font-weight:bold;cursor:pointer}button:hover{filter:brightness(1.13)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.item{background:#0a1929;border:1px solid #203750;border-radius:9px;padding:14px;position:relative;overflow:hidden}.item:before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--cyan)}.label{color:var(--muted);font-size:11px;letter-spacing:.8px;margin-bottom:8px;text-transform:uppercase}.value{font-weight:bold;overflow-wrap:anywhere;font-size:14px}.good{color:#62e6ad}.bad{color:#ffc46a}.header-row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #203750;padding:12px 2px;font-size:13px}.error{background:#3a1c27;color:#ffb6b6;border:1px solid #87404a;border-radius:8px;padding:12px;margin-top:14px}.small{color:var(--muted);font-size:12px;line-height:1.6}.last-scan{line-height:1.9;overflow-wrap:anywhere;color:#c8d8e8}.empty{color:var(--muted)}.scan-line{height:3px;background:#203750;border-radius:5px;overflow:hidden;margin-top:17px}.scan-line span{display:block;width:35%;height:100%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:scan 3s ease-in-out infinite alternate}@keyframes scan{from{transform:translateX(0)}to{transform:translateX(185%)}}.footer{text-align:center;color:#617b94;font-size:11px;padding:8px;letter-spacing:1px}
+@media(max-width:650px){.top{align-items:flex-start;flex-direction:column}.hero{grid-template-columns:1fr;text-align:center}.hero p{margin:auto}.mascot-wrap{min-height:130px}form{flex-direction:column}.grid{grid-template-columns:1fr}.panel{padding:17px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style></head><body><div class="container">
+<header class="top"><div class="brand"><div class="brand-mark">⌁</div><div><h1>WEB<span>STRIKE</span></h1><p>WEBSITE SECURITY LAB / 01</p></div></div><nav class="nav"><a href="/">⌂ Home</a><a href="/history">◷ Scan History</a></nav></header>
+<section class="hero"><div><div class="eyebrow">● SYSTEM READY</div><h2>Check your website.<br>Know your security.</h2><p>A simple educational checker for website availability, HTTPS certificates and important security headers.</p><div class="scan-line"><span></span></div></div><div class="mascot-wrap" aria-label="Original animated yellow electric mascot"><span class="spark one">✦</span><span class="spark two">ϟ</span><div class="mascot" aria-hidden="true"><div class="ear left"></div><div class="ear right"></div><div class="eye left"></div><div class="eye right"></div><div class="cheek left"></div><div class="cheek right"></div><div class="mouth"></div></div></div></section>
+<section class="panel"><div class="tag">01 / TARGET INPUT</div><h3>Website Scanner</h3><form method="POST" action="/scan"><input type="text" name="website" placeholder="Enter a website, e.g. example.com" required maxlength="2048"><button type="submit">⚡ Check Website</button></form>{% if error %}<div class="error">{{ error }}</div>{% endif %}<p class="small">A scan starts only when you click the button. Checks are limited to public websites; this is not a full security audit.</p></section>
+<section class="panel"><div class="tag">02 / RECENT ACTIVITY</div><h3>Last Scan</h3>{% if last_scan %}<div class="last-scan"><strong>{{ last_scan["website"] }}</strong><br>Website status: {{ last_scan["website_status"] }}<br>HTTPS status: {{ last_scan["https_status"] }}<br><span class="small">Scanned at: {{ last_scan["scanned_at"] }}</span></div>{% else %}<p class="empty">No scans saved yet. Enter a website above and click Check Website.</p>{% endif %}<p><a href="/history" style="color:#42d9e8;text-decoration:none;">Open scan history →</a></p></section>
+{% if result %}<section class="panel"><div class="tag">03 / SCAN REPORT</div><h3>Current Scan Results</h3><div class="grid"><div class="item"><div class="label">Website</div><div class="value">{{ result.url }}</div></div><div class="item"><div class="label">Website Status</div><div class="value">{{ result.website_status }}</div></div><div class="item"><div class="label">HTTP Response Code</div><div class="value">{{ result.http_code }}</div></div><div class="item"><div class="label">HTTPS Status</div><div class="value">{{ result.https_status }}</div></div><div class="item"><div class="label">SSL/TLS Certificate</div><div class="value">{{ result.certificate.status }}</div></div><div class="item"><div class="label">Certificate Expiry</div><div class="value">{{ result.certificate.expiry }}</div></div></div><h3 style="margin-top:23px">Security Headers</h3>{% for header in result.headers %}<div class="header-row"><span>{{ header.name }}</span>{% if header.present %}<strong class="good">✓ Present</strong>{% else %}<strong class="bad">! Missing</strong>{% endif %}</div>{% endfor %}<p class="small">A missing header is not proof that a website is vulnerable. Header requirements depend on the website.</p></section>{% endif %}
+<div class="footer">WEBSTRIKE // LEARN • CHECK • IMPROVE</div></div></body></html>
 """
 
 
@@ -337,44 +256,12 @@ def history():
             rows = []
 
     history_page = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>WebStrike - Scan History</title>
-        <style>
-            * { box-sizing:border-box; }
-            body { margin:0; padding:25px; font-family:Arial,sans-serif; background:#f4f6f8; color:#222; }
-            main { max-width:900px; margin:20px auto; }
-            h1 { color:#244b70; }
-            a { color:#315f87; }
-            section { background:#fff; border:1px solid #d9e0e6; border-radius:7px; padding:20px; margin-top:18px; }
-            .entry { padding:14px 0; border-bottom:1px solid #e2e6ea; overflow-wrap:anywhere; line-height:1.6; }
-            .entry:last-child { border-bottom:0; }
-            .muted { color:#68727c; font-size:13px; }
-            .empty { color:#68727c; }
-        </style>
-    </head>
-    <body><main>
-        <h1>WebStrike Scan History</h1>
-        <p><a href="/">Back to scanner</a></p>
-        <section>
-        {% if rows %}
-            {% for row in rows %}
-                <div class="entry">
-                    <strong>{{ row["website"] }}</strong><br>
-                    Website status: {{ row["website_status"] }}<br>
-                    HTTPS status: {{ row["https_status"] }}<br>
-                    <span class="muted">Scanned at: {{ row["scanned_at"] }}</span>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="empty">No scan history yet. Run your first website check.</p>
-        {% endif %}
-        </section>
-    </main></body></html>
-"""
+    <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebStrike | Scan History</title>
+    <style>*{box-sizing:border-box}body{margin:0;padding:25px;font-family:Arial,sans-serif;background:#081321;color:#edf6ff;background-image:linear-gradient(#42d9e809 1px,transparent 1px),linear-gradient(90deg,#42d9e809 1px,transparent 1px);background-size:32px 32px}main{max-width:900px;margin:20px auto}h1{color:#42d9e8;letter-spacing:1px}a{color:#42d9e8;text-decoration:none}section{background:#101f32;border:1px solid #203750;border-radius:13px;padding:20px;margin-top:18px}.entry{padding:15px 0;border-bottom:1px solid #203750;overflow-wrap:anywhere;line-height:1.7}.entry:last-child{border-bottom:0}.muted,.empty{color:#91a5ba;font-size:13px}.back{display:inline-block;padding:9px 13px;border:1px solid #29475e;border-radius:8px}</style></head>
+    <body><main><p class="muted">WEBSTRIKE / ACTIVITY LOG</p><h1>Scan History</h1><p><a class="back" href="/">← Back to scanner</a></p><section>
+    {% if rows %}{% for row in rows %}<div class="entry"><strong>{{ row["website"] }}</strong><br>Website status: {{ row["website_status"] }}<br>HTTPS status: {{ row["https_status"] }}<br><span class="muted">Scanned at: {{ row["scanned_at"] }}</span></div>{% endfor %}{% else %}<p class="empty">No scan history yet. Run your first website check.</p>{% endif %}
+    </section></main></body></html>
+    """
     return render_template_string(history_page, rows=rows)
 
 
