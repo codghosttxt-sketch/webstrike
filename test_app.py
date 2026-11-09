@@ -35,6 +35,12 @@ class WebStrikePageTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"WebStrike", response.data)
 
+    def test_home_page_shows_manual_check_and_last_scan_section(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Check Website", response.data)
+        self.assertIn(b"Last Scan", response.data)
+
     def test_history_page_loads_before_first_scan(self):
         response = self.client.get("/history")
         self.assertEqual(response.status_code, 200)
