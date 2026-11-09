@@ -61,6 +61,11 @@ def check_certificate(hostname):
 
 def scan_website(user_url):
     # Add https:// if the user leaves out the protocol.
+    user_url = (user_url or "").strip()
+    if not user_url:
+        raise ValueError("Please enter a website address.")
+    if len(user_url) > 2048:
+        raise ValueError("Website address is too long.")
     if not user_url.startswith(("http://", "https://")):
         user_url = "https://" + user_url
 
@@ -86,6 +91,9 @@ def scan_website(user_url):
     if not is_public_website(hostname):
         raise ValueError("Please enter a publicly accessible website.")
 
+    # Keep a safe default even when the website cannot be reached.
+    final_url = user_url
+
     # Check whether the submitted address responds.
     try:
         with requests.get(
@@ -98,7 +106,8 @@ def scan_website(user_url):
         ) as response:
             website_status = "Reachable"
             http_code = str(response.status_code)
-            headers = dict(response.headers)
+            # HTTP header names are case-insensitive, so store them in lowercase.
+            headers = {name.lower(): value for name, value in response.headers.items()}
     except requests.exceptions.SSLError:
         website_status = "Certificate / HTTPS error"
         http_code = "Not available"
@@ -131,7 +140,7 @@ def scan_website(user_url):
     for header in important_headers:
         header_results.append({
             "name": header,
-            "present": header in headers
+            "present": header.lower() in headers
         })
 
     return {
