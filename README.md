@@ -35,7 +35,7 @@ A beginner-friendly website security and HTTPS checker built with Python and Fla
 
    ```powershell
    python -m venv .venv
-   `.venv\Scripts\Activate.ps1
+   .venv\Scripts\Activate.ps1
    ```
 
    If PowerShell blocks activation, you can skip activation and use the Python executable inside `.venv\Scripts\` directly.
