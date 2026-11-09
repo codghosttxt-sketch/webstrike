@@ -11,58 +11,32 @@ WebStrike is a small educational website checker. It checks:
 5. Whether four common HTTP security headers are present.
 6. It stores and displays recent scan history using SQLite.
 
-FILES
------
-app.py           Main Python program. The HTML and CSS are included in this file.
-requirements.txt Required Python packages.
+PROJECT FILES
+-------------
+app.py           Main Python program. HTML and CSS are included.
+test_app.py      Automated tests for basic input validation and pages.
+requirements.txt Python packages.
 README.md        Full project information and setup instructions.
 webstrike.db     Created automatically after the first successful scan.
 
-HOW TO RUN
-----------
-1. Install Python 3 on your laptop.
-2. Open the project folder in VS Code.
-3. Open the VS Code terminal.
-4. Create a virtual environment:
-      python -m venv venv
-
-   Windows:
-      venv\Scripts\activate
-
-   macOS/Linux:
-      source venv/bin/activate
-
+WINDOWS / VS CODE TERMINAL
+--------------------------
+1. Open the project folder in VS Code.
+2. Open Terminal -> New Terminal.
+3. Create a virtual environment:
+      python -m venv .venv
+4. Activate it:
+      .venv\Scripts\Activate.ps1
 5. Install packages:
       python -m pip install -r requirements.txt
-
-6. Run:
+6. Run tests:
+      python -m unittest -v
+7. Start the app:
       python app.py
-
-7. Open your browser and visit:
+8. Open this address in your browser:
       http://127.0.0.1:5000
 
-8. Enter a public website such as:
-      https://example.com
-
-9. Select "View Scan History" to see recent checks.
-
-HOW TO MAKE SIMPLE CHANGES
---------------------------
-Change the page title:
-  Find: <title>WebStrike - Website Security Checker</title>
-
-Change the heading:
-  Find: <h1>🛡️ WebStrike</h1>
-
-Change the button text:
-  Find: Check Website
-
-Change the background colour:
-  Find: background: #0b1220;
-
-Add another security header:
-  Find the important_headers list in scan_website().
-  Add another header name as a quoted item.
+If PowerShell blocks activation, use .venv\Scripts\python.exe instead of python.
 
 IMPORTANT NOTES
 ---------------
@@ -72,5 +46,4 @@ IMPORTANT NOTES
 - "Reachable" means the website responded; it does not mean the site is safe.
 - HTTPS and a valid certificate protect the connection but do not prove that the website itself is trustworthy.
 - Redirects are not automatically followed.
-- Some websites block automated requests or respond differently depending on location, so results can vary.
 - Scan history is stored locally in webstrike.db, not in GitHub.
