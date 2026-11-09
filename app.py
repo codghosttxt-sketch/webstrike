@@ -79,7 +79,7 @@ def scan_website(user_url):
         response = requests.get(
             user_url,
             timeout=8,
-            allow_redirects=True,
+            allow_redirects=False,
             verify=True,
             headers={"User-Agent": "WebStrike-Educational-Checker/1.0"}
         )
@@ -241,6 +241,7 @@ PAGE = """
     <div class="top">
         <h1>🛡️ WebStrike</h1>
         <p>Website Security Analysis and HTTPS Checker</p>
+        <p><a href="/history" style="color:#54b7ff;">View Scan History</a></p>
     </div>
 
     <div class="panel">
@@ -319,6 +320,62 @@ def scan():
         return render_template_string(PAGE, result=result, error=None)
     except ValueError as error:
         return render_template_string(PAGE, result=None, error=str(error))
+
+
+@app.route("/history", methods=["GET"])
+def history():
+    """Display recent scans saved in the local SQLite database."""
+    with sqlite3.connect(DATABASE) as connection:
+        connection.row_factory = sqlite3.Row
+        try:
+            rows = connection.execute("""
+                SELECT website, website_status, https_status, scanned_at
+                FROM scans
+                ORDER BY id DESC
+                LIMIT 20
+            """).fetchall()
+        except sqlite3.OperationalError:
+            rows = []
+
+    history_page = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WebStrike - Scan History</title>
+        <style>
+            body { margin:0; padding:25px; font-family:Arial,sans-serif;
+                   background:#0b1220; color:#edf3ff; }
+            main { max-width:900px; margin:25px auto; }
+            section { background:#151f32; border:1px solid #293750;
+                      border-radius:12px; padding:20px; margin-bottom:12px; }
+            h1 { color:#54b7ff; }
+            a { color:#54b7ff; }
+            .entry { padding:14px 0; border-bottom:1px solid #293750;
+                     overflow-wrap:anywhere; }
+            .muted { color:#9fb0c8; font-size:13px; }
+        </style>
+    </head>
+    <body><main>
+        <h1>WebStrike Scan History</h1>
+        <p><a href="/">← Back to scanner</a></p>
+        <section>
+        {% if rows %}
+            {% for row in rows %}
+                <div class="entry">
+                    <strong>{{ row["website"] }}</strong>
+                    <p>{{ row["website_status"] }} · {{ row["https_status"] }}</p>
+                    <span class="muted">{{ row["scanned_at"] }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No scan history yet. Run your first website check.</p>
+        {% endif %}
+        </section>
+    </main></body></html>
+    """
+    return render_template_string(history_page, rows=rows)
 
 
 if __name__ == "__main__":
