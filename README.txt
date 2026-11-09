@@ -9,20 +9,21 @@ WebStrike is a small educational website checker. It checks:
 3. Whether a verified HTTPS/TLS connection can be made.
 4. The TLS certificate expiry date (when the certificate can be verified).
 5. Whether four common HTTP security headers are present.
-6. It stores basic scan history in a local SQLite database.
+6. It stores and displays recent scan history using SQLite.
 
 FILES
 -----
 app.py           Main Python program. The HTML and CSS are included in this file.
 requirements.txt Required Python packages.
+README.md        Full project information and setup instructions.
 webstrike.db     Created automatically after the first successful scan.
 
 HOW TO RUN
 ----------
 1. Install Python 3 on your laptop.
-2. Open the webstrike_project folder in VS Code.
+2. Open the project folder in VS Code.
 3. Open the VS Code terminal.
-4. (Optional but recommended) Create a virtual environment:
+4. Create a virtual environment:
       python -m venv venv
 
    Windows:
@@ -32,7 +33,7 @@ HOW TO RUN
       source venv/bin/activate
 
 5. Install packages:
-      pip install -r requirements.txt
+      python -m pip install -r requirements.txt
 
 6. Run:
       python app.py
@@ -42,6 +43,8 @@ HOW TO RUN
 
 8. Enter a public website such as:
       https://example.com
+
+9. Select "View Scan History" to see recent checks.
 
 HOW TO MAKE SIMPLE CHANGES
 --------------------------
@@ -64,9 +67,10 @@ Add another security header:
 IMPORTANT NOTES
 ---------------
 - This is a beginner educational project, not a professional vulnerability scanner.
-- Only check public websites you are allowed to test.
+- Only check public websites you are allowed to assess.
 - A missing security header does not automatically mean a website is vulnerable.
-- "Reachable" means the website responded to the request; it does not mean the site is safe.
+- "Reachable" means the website responded; it does not mean the site is safe.
 - HTTPS and a valid certificate protect the connection but do not prove that the website itself is trustworthy.
+- Redirects are not automatically followed.
 - Some websites block automated requests or respond differently depending on location, so results can vary.
-- The local SQLite database stores scan history, but this simple version does not yet display a history page.
+- Scan history is stored locally in webstrike.db, not in GitHub.
