@@ -1,64 +1,73 @@
-# WebStrike
+# SiteCheck
 
 A simple student project that checks basic website security details using Python and Flask.
 
-## Features
+## Quick navigation
 
-1. Checks whether a public website responds.
-2. Shows the HTTP response code.
-3. Checks HTTPS and the TLS certificate.
-4. Checks four common security headers.
-5. Saves scan results in a local SQLite database.
-6. Shows the latest scan and the last 20 scans.
-7. Uses a simple cyber-style dashboard with an original animated mascot.
-8. Starts on port 5000, or checks nearby ports if that port is busy.
+| If you want to... | Open this file |
+|---|---|
+| See the complete application and change its features | [app.py](app.py) |
+| See which Python packages are required | [requirements.txt](requirements.txt) |
+| Check the basic project tests | [test_app.py](test_app.py) |
+| Understand or run the project | [README.md](README.md) |
 
-## Project file order
+## Project files (easy order)
 
 ```text
-webstrike/
-├── app.py           # Main application and website checks
-├── requirements.txt # Required Python packages
-├── test_app.py      # Basic project tests
-├── README.md        # Project guide
-├── .gitignore       # Files Git should not upload
-└── LICENSE          # Project license
+sitecheck/
+├── app.py            # 1. Main application, scanner and web pages
+├── requirements.txt  # 2. Python packages needed by the app
+├── test_app.py       # 3. Basic tests for important features
+├── README.md         # 4. Project guide and instructions
+└── .gitignore        # 5. Keeps temporary files out of GitHub
 ```
 
-The `webstrike.db` database is created automatically when scans are saved. It is a local data file and should not be uploaded to GitHub.
+GitHub displays files in its own alphabetical order. The numbered list above is the recommended order to understand the project.
+
+The `webstrike.db` database is created automatically when scans are saved. It is local application data and should not be uploaded to GitHub.
 
 ## What each file does
 
-- **app.py:** Contains the Flask app, website checking functions, pages and scan history.
-- **requirements.txt:** Lists the packages needed to run the project.
-- **test_app.py:** Contains simple tests for important app features.
-- **README.md:** Explains the project and how to start it.
-- **.gitignore:** Keeps temporary files and the local database out of Git.
-- **LICENSE:** Explains how the project can be used.
+- **app.py:** Contains the Flask application, website checks, dashboard, scan history and delete-scan route.
+- **requirements.txt:** Lists the Python packages required by the application.
+- **test_app.py:** Contains basic tests for input validation and page routes.
+- **README.md:** Explains the project and how to use it.
+- **.gitignore:** Prevents temporary files and the local database from being committed.
+
+## Main features
+
+1. Checks whether a public website responds.
+2. Displays the HTTP response code.
+3. Checks HTTPS and the TLS certificate.
+4. Checks four common security headers.
+5. Saves scan records in SQLite.
+6. Displays the latest scan and recent scan history.
+7. Allows an individual history record to be deleted.
+8. Uses a clean dashboard with a simple animated radar graphic.
+9. Checks for a free local port when the preferred port is occupied.
 
 ## Run the project
 
 1. Install Python 3.
 2. Open a terminal in the project folder.
-3. Install the packages:
+3. Install the required packages:
 
    ```bash
    python -m pip install -r requirements.txt
    ```
 
-4. Start WebStrike:
+4. Start the application:
 
    ```bash
    python app.py
    ```
 
-5. Open the local address printed in the terminal. It normally uses `http://127.0.0.1:5000`.
-
-6. Enter a public website and click **Check Website**. Open **Scan History** to view saved results.
+5. Open the local address printed in the terminal.
+6. Enter a public website and click **Check Website**. Open **Scan History** to view or delete saved records.
 
 ## Simple explanation for a project review
 
-WebStrike is a basic website security checker. The user enters a public website and clicks the check button. Python sends a web request and checks the response, HTTPS certificate and selected security headers. Flask displays the result, and SQLite stores the scan history.
+SiteCheck is a basic website security checker. The user enters a public website and clicks the check button. Python checks the website response, HTTPS certificate and selected security headers. Flask displays the results, and SQLite stores the scan history.
 
 ## Limitations and safe use
 
@@ -66,8 +75,8 @@ WebStrike is a basic website security checker. The user enters a public website 
 - Only check public websites you are allowed to assess.
 - A missing header does not automatically mean a website is vulnerable.
 - A valid HTTPS certificate does not prove that a website is trustworthy.
-- Scan history is stored locally in `webstrike.db`.
+- Scan history is stored in the local `webstrike.db` database.
 
-## Learning topics
+## Topics demonstrated
 
 Python functions, Flask routes, HTTP requests, HTTPS/TLS, response headers, input validation and SQLite.
