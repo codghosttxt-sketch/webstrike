@@ -13,7 +13,8 @@ A beginner-friendly website security and HTTPS checker built with Python and Fla
   - Content-Security-Policy
   - X-Content-Type-Options
   - X-Frame-Options
-- Recent scan history stored locally with SQLite
+- The most recent scan shown on the home page
+- The 20 most recent scans stored locally with SQLite
 
 ## Project files
 
@@ -54,7 +55,9 @@ A beginner-friendly website security and HTTPS checker built with Python and Fla
 
 8. Open **http://127.0.0.1:5000** in your browser.
 9. Enter a public website, such as `https://example.com`.
-10. Select **View Scan History** to see recent scans.
+10. The home page shows your **Last Scan** after a scan is completed.
+11. Select **Scan History** to see the 20 most recent saved scans.
+12. To scan again, enter a website and click **Check Website**. Scans only run when you submit the form.
 
 ## Safety and limitations
 
