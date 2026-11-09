@@ -1,78 +1,73 @@
-# 🛡️ WebStrike
+# WebStrike
 
-A beginner-friendly website security and HTTPS checker built with Python and Flask.
+A simple student project that checks basic website security details using Python and Flask.
 
-## What it checks
+## Features
 
-- Whether a public website responds to an HTTP request
-- The HTTP response code
-- Whether a verified HTTPS/TLS connection is available
-- TLS certificate expiry date (when the certificate can be verified)
-- Four common HTTP security headers:
-  - Strict-Transport-Security
-  - Content-Security-Policy
-  - X-Content-Type-Options
-  - X-Frame-Options
-- The most recent scan shown on the home page
-- The 20 most recent scans stored locally with SQLite
+1. Checks whether a public website responds.
+2. Shows the HTTP response code.
+3. Checks HTTPS and the TLS certificate.
+4. Checks four common security headers.
+5. Saves scan results in a local SQLite database.
+6. Shows the latest scan and the last 20 scans.
+7. Uses a simple cyber-style dashboard with an original animated mascot.
+8. Starts on port 5000, or checks nearby ports if that port is busy.
 
-## Project files
+## Project file order
 
-| File | Purpose |
-| --- | --- |
-| `app.py` | Main Flask application, website checks and history page |
-| `requirements.txt` | Python package dependencies |
-| `README.md` | Project documentation |
-| `README.txt` | Additional beginner setup notes |
-| `webstrike.db` | Local scan database, created automatically |
+```text
+webstrike/
+├── app.py           # Main application and website checks
+├── requirements.txt # Required Python packages
+├── test_app.py      # Basic project tests
+├── README.md        # Project guide
+├── .gitignore       # Files Git should not upload
+└── LICENSE          # Project license
+```
 
-## Run on Windows
+The `webstrike.db` database is created automatically when scans are saved. It is a local data file and should not be uploaded to GitHub.
+
+## What each file does
+
+- **app.py:** Contains the Flask app, website checking functions, pages and scan history.
+- **requirements.txt:** Lists the packages needed to run the project.
+- **test_app.py:** Contains simple tests for important app features.
+- **README.md:** Explains the project and how to start it.
+- **.gitignore:** Keeps temporary files and the local database out of Git.
+- **LICENSE:** Explains how the project can be used.
+
+## Run the project
 
 1. Install Python 3.
-2. Download or clone this repository.
-3. Open the project folder in VS Code.
-4. Open **Terminal → New Terminal**.
-5. Create a virtual environment (recommended):
+2. Open a terminal in the project folder.
+3. Install the packages:
 
-   ```powershell
-   python -m venv .venv
-   .venv\Scripts\Activate.ps1
-   ```
-
-   If PowerShell blocks activation, you can skip activation and use the Python executable inside `.venv\Scripts\` directly.
-
-6. Install dependencies:
-
-   ```powershell
+   ```bash
    python -m pip install -r requirements.txt
    ```
 
-7. Start the app:
+4. Start WebStrike:
 
-   ```powershell
+   ```bash
    python app.py
    ```
 
-8. Open **http://127.0.0.1:5000** in your browser.
-9. Enter a public website, such as `https://example.com`.
-10. The home page shows your **Last Scan** after a scan is completed.
-11. Select **Scan History** to see the 20 most recent saved scans.
-12. To scan again, enter a website and click **Check Website**. Scans only run when you submit the form.
+5. Open the local address printed in the terminal. It normally uses `http://127.0.0.1:5000`.
 
-## Safety and limitations
+6. Enter a public website and click **Check Website**. Open **Scan History** to view saved results.
 
-- Use this educational tool only to check public websites you are permitted to assess.
-- This is a basic checker, not a full vulnerability scanner or penetration-testing tool.
-- A missing security header does not automatically mean a website is vulnerable.
-- A reachable website or valid HTTPS certificate does not prove that the website is trustworthy.
-- Redirects are not automatically followed by the checker. This avoids silently sending a request to a different destination.
-- Some websites block automated requests or respond differently depending on location, so results may vary.
-- Scan history is stored locally in `webstrike.db`; it is not uploaded to GitHub.
+## Simple explanation for a project review
 
-## Learning goals
+WebStrike is a basic website security checker. The user enters a public website and clicks the check button. Python sends a web request and checks the response, HTTPS certificate and selected security headers. Flask displays the result, and SQLite stores the scan history.
 
-This project demonstrates beginner concepts in Python, Flask routes, HTTP requests, TLS certificates, HTTP response headers, input validation and SQLite databases.
+## Limitations and safe use
 
-## License
+- This is an educational checker, not a full vulnerability scanner.
+- Only check public websites you are allowed to assess.
+- A missing header does not automatically mean a website is vulnerable.
+- A valid HTTPS certificate does not prove that a website is trustworthy.
+- Scan history is stored locally in `webstrike.db`.
 
-MIT
+## Learning topics
+
+Python functions, Flask routes, HTTP requests, HTTPS/TLS, response headers, input validation and SQLite.
