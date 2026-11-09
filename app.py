@@ -71,22 +71,34 @@ def scan_website(user_url):
 
     hostname = parsed.hostname
 
+    # Keep input simple: no embedded credentials or unusual ports.
+    try:
+        port = parsed.port
+    except ValueError:
+        raise ValueError("Please enter a valid website address.")
+
+    if parsed.username or parsed.password:
+        raise ValueError("Do not include a username or password in the website address.")
+
+    if port not in (None, 80, 443):
+        raise ValueError("Please use the normal website ports (80 or 443).")
+
     if not is_public_website(hostname):
         raise ValueError("Please enter a publicly accessible website.")
 
     # Check whether the submitted address responds.
     try:
-        response = requests.get(
+        with requests.get(
             user_url,
             timeout=8,
             allow_redirects=False,
             verify=True,
+            stream=True,
             headers={"User-Agent": "WebStrike-Educational-Checker/1.0"}
-        )
-        website_status = "Reachable"
-        http_code = str(response.status_code)
-        final_url = response.url
-        headers = response.headers
+        ) as response:
+            website_status = "Reachable"
+            http_code = str(response.status_code)
+            headers = dict(response.headers)
     except requests.exceptions.SSLError:
         website_status = "Certificate / HTTPS error"
         http_code = "Not available"
