@@ -3,7 +3,7 @@ import unittest
 from app import app, scan_website
 
 
-class WebStrikeInputTests(unittest.TestCase):
+class SiteCheckInputTests(unittest.TestCase):
     def test_empty_address_is_rejected(self):
         with self.assertRaises(ValueError):
             scan_website("")
@@ -25,7 +25,7 @@ class WebStrikeInputTests(unittest.TestCase):
             scan_website("a" * 2049)
 
 
-class WebStrikePageTests(unittest.TestCase):
+class SiteCheckPageTests(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
         self.client = app.test_client()
