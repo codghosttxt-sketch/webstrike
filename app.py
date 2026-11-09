@@ -185,137 +185,92 @@ PAGE = """
     <title>WebStrike - Website Security Checker</title>
     <style>
         * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b1220;
-            color: #edf3ff;
-        }
-        .container { width: 90%; max-width: 900px; margin: 45px auto; }
-        .top { text-align: center; margin-bottom: 28px; }
-        .top h1 { color: #54b7ff; margin-bottom: 8px; }
-        .top p { color: #b8c5d9; }
-        .panel {
-            background: #151f32;
-            border: 1px solid #293750;
-            border-radius: 14px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        form { display: flex; gap: 10px; }
-        input {
-            flex: 1;
-            min-width: 0;
-            padding: 14px;
-            border: 1px solid #40516e;
-            border-radius: 8px;
-            background: #0b1220;
-            color: white;
-            font-size: 15px;
-        }
-        button {
-            padding: 14px 22px;
-            border: 0;
-            border-radius: 8px;
-            background: #1687dc;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        button:hover { background: #0872c3; }
-        h2 { color: #54b7ff; font-size: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .item {
-            background: #0e1829;
-            border: 1px solid #293750;
-            border-radius: 10px;
-            padding: 15px;
-        }
-        .label { color: #9fb0c8; font-size: 13px; margin-bottom: 7px; }
-        .value { font-weight: bold; overflow-wrap: anywhere; }
-        .good { color: #56dfa0; }
-        .bad { color: #ffbd69; }
-        .header-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            border-bottom: 1px solid #293750;
-            padding: 10px 0;
-        }
-        .error {
-            background: #4b2028;
-            color: #ffd9df;
-            border-radius: 8px;
-            padding: 13px;
-            margin-top: 15px;
-        }
-        .small { color: #9fb0c8; font-size: 12px; line-height: 1.5; }
-        @media (max-width: 600px) {
-            form { flex-direction: column; }
-            .grid { grid-template-columns: 1fr; }
-            .container { margin: 25px auto; }
+        body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f8; color: #222; }
+        .container { width: 92%; max-width: 900px; margin: 32px auto; }
+        .top { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:22px; }
+        .top h1 { margin:0; color:#244b70; font-size:28px; }
+        .top p { margin:5px 0 0; color:#626b75; }
+        .nav a { display:inline-block; margin-left:8px; padding:10px 13px; border:1px solid #cbd5df; border-radius:5px; color:#244b70; text-decoration:none; background:#fff; }
+        .nav a:hover { background:#eaf1f7; }
+        .panel { background:#fff; border:1px solid #d9e0e6; border-radius:7px; padding:22px; margin-bottom:17px; }
+        h2 { color:#244b70; font-size:19px; margin:0 0 15px; }
+        form { display:flex; gap:10px; }
+        input { flex:1; min-width:0; padding:12px; border:1px solid #b9c4ce; border-radius:5px; font-size:15px; background:#fff; color:#222; }
+        input:focus { outline:2px solid #b7d3eb; border-color:#477da8; }
+        button { padding:12px 20px; border:1px solid #244b70; border-radius:5px; background:#315f87; color:#fff; font-weight:bold; cursor:pointer; }
+        button:hover { background:#244b70; }
+        .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+        .item { background:#f8fafb; border:1px solid #e0e5e9; border-radius:5px; padding:13px; }
+        .label { color:#626b75; font-size:13px; margin-bottom:6px; }
+        .value { font-weight:bold; overflow-wrap:anywhere; }
+        .good { color:#267044; } .bad { color:#a15a16; }
+        .header-row { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid #e2e6ea; padding:10px 0; }
+        .error { background:#fff1f0; color:#9d2d25; border:1px solid #edc7c3; border-radius:5px; padding:12px; margin-top:14px; }
+        .small { color:#68727c; font-size:12px; line-height:1.5; }
+        .last-scan { line-height:1.7; overflow-wrap:anywhere; }
+        .empty { color:#68727c; }
+        @media (max-width:600px) {
+            .top { align-items:flex-start; flex-direction:column; }
+            .nav a { margin:8px 8px 0 0; }
+            form { flex-direction:column; }
+            .grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="top">
-        <h1>🛡️ WebStrike</h1>
-        <p>Website Security Analysis and HTTPS Checker</p>
-        <p><a href="/history" style="color:#54b7ff;">View Scan History</a></p>
+        <div>
+            <h1>WebStrike</h1>
+            <p>Website Security Checker</p>
+        </div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <a href="/history">Scan History</a>
+        </nav>
     </div>
 
     <div class="panel">
         <h2>Check a Website</h2>
         <form method="POST" action="/scan">
-            <input type="text" name="website" placeholder="Enter a website, e.g. example.com" required>
+            <input type="text" name="website" placeholder="Enter a website, e.g. example.com" required maxlength="2048">
             <button type="submit">Check Website</button>
         </form>
-        {% if error %}
-            <div class="error">{{ error }}</div>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <p class="small">Click Check Website whenever you want to run a scan. This tool performs basic checks on public websites; it is not a full security audit.</p>
+    </div>
+
+    <div class="panel">
+        <h2>Last Scan</h2>
+        {% if last_scan %}
+            <div class="last-scan">
+                <strong>{{ last_scan["website"] }}</strong><br>
+                Website status: {{ last_scan["website_status"] }}<br>
+                HTTPS status: {{ last_scan["https_status"] }}<br>
+                <span class="small">Scanned at: {{ last_scan["scanned_at"] }}</span>
+            </div>
+        {% else %}
+            <p class="empty">No scans saved yet. Enter a website above and click Check Website.</p>
         {% endif %}
-        <p class="small">Use this educational tool only with public websites. Results are basic checks, not a full security audit.</p>
+        <p><a href="/history" style="color:#315f87;">View all scan history</a></p>
     </div>
 
     {% if result %}
     <div class="panel">
-        <h2>Scan Results</h2>
+        <h2>Current Scan Results</h2>
         <div class="grid">
-            <div class="item">
-                <div class="label">Website</div>
-                <div class="value">{{ result.url }}</div>
-            </div>
-            <div class="item">
-                <div class="label">Website Status</div>
-                <div class="value">{{ result.website_status }}</div>
-            </div>
-            <div class="item">
-                <div class="label">HTTP Response Code</div>
-                <div class="value">{{ result.http_code }}</div>
-            </div>
-            <div class="item">
-                <div class="label">HTTPS Status</div>
-                <div class="value">{{ result.https_status }}</div>
-            </div>
-            <div class="item">
-                <div class="label">SSL/TLS Certificate</div>
-                <div class="value">{{ result.certificate.status }}</div>
-            </div>
-            <div class="item">
-                <div class="label">Certificate Expiry</div>
-                <div class="value">{{ result.certificate.expiry }}</div>
-            </div>
+            <div class="item"><div class="label">Website</div><div class="value">{{ result.url }}</div></div>
+            <div class="item"><div class="label">Website Status</div><div class="value">{{ result.website_status }}</div></div>
+            <div class="item"><div class="label">HTTP Response Code</div><div class="value">{{ result.http_code }}</div></div>
+            <div class="item"><div class="label">HTTPS Status</div><div class="value">{{ result.https_status }}</div></div>
+            <div class="item"><div class="label">SSL/TLS Certificate</div><div class="value">{{ result.certificate.status }}</div></div>
+            <div class="item"><div class="label">Certificate Expiry</div><div class="value">{{ result.certificate.expiry }}</div></div>
         </div>
-
-        <h2 style="margin-top:25px;">Security Headers</h2>
+        <h2 style="margin-top:22px;">Security Headers</h2>
         {% for header in result.headers %}
         <div class="header-row">
             <span>{{ header.name }}</span>
-            {% if header.present %}
-                <strong class="good">Present</strong>
-            {% else %}
-                <strong class="bad">Missing</strong>
-            {% endif %}
+            {% if header.present %}<strong class="good">Present</strong>{% else %}<strong class="bad">Missing</strong>{% endif %}
         </div>
         {% endfor %}
         <p class="small">A missing header is not proof that a website is vulnerable. Header requirements depend on the website.</p>
@@ -327,9 +282,26 @@ PAGE = """
 """
 
 
+def get_last_scan():
+    """Return the most recent saved scan, or None when there is no history."""
+    with sqlite3.connect(DATABASE) as connection:
+        connection.row_factory = sqlite3.Row
+        try:
+            return connection.execute("""
+                SELECT website, website_status, https_status, scanned_at
+                FROM scans
+                ORDER BY id DESC
+                LIMIT 1
+            """).fetchone()
+        except sqlite3.OperationalError:
+            return None
+
+
 @app.route("/", methods=["GET"])
 def home():
-    return render_template_string(PAGE, result=None, error=None)
+    return render_template_string(
+        PAGE, result=None, error=None, last_scan=get_last_scan()
+    )
 
 
 @app.route("/scan", methods=["POST"])
@@ -338,9 +310,13 @@ def scan():
     try:
         result = scan_website(website)
         save_scan(result)
-        return render_template_string(PAGE, result=result, error=None)
+        return render_template_string(
+            PAGE, result=result, error=None, last_scan=get_last_scan()
+        )
     except ValueError as error:
-        return render_template_string(PAGE, result=None, error=str(error))
+        return render_template_string(
+            PAGE, result=None, error=str(error), last_scan=get_last_scan()
+        )
 
 
 @app.route("/history", methods=["GET"])
@@ -366,36 +342,37 @@ def history():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>WebStrike - Scan History</title>
         <style>
-            body { margin:0; padding:25px; font-family:Arial,sans-serif;
-                   background:#0b1220; color:#edf3ff; }
-            main { max-width:900px; margin:25px auto; }
-            section { background:#151f32; border:1px solid #293750;
-                      border-radius:12px; padding:20px; margin-bottom:12px; }
-            h1 { color:#54b7ff; }
-            a { color:#54b7ff; }
-            .entry { padding:14px 0; border-bottom:1px solid #293750;
-                     overflow-wrap:anywhere; }
-            .muted { color:#9fb0c8; font-size:13px; }
+            * { box-sizing:border-box; }
+            body { margin:0; padding:25px; font-family:Arial,sans-serif; background:#f4f6f8; color:#222; }
+            main { max-width:900px; margin:20px auto; }
+            h1 { color:#244b70; }
+            a { color:#315f87; }
+            section { background:#fff; border:1px solid #d9e0e6; border-radius:7px; padding:20px; margin-top:18px; }
+            .entry { padding:14px 0; border-bottom:1px solid #e2e6ea; overflow-wrap:anywhere; line-height:1.6; }
+            .entry:last-child { border-bottom:0; }
+            .muted { color:#68727c; font-size:13px; }
+            .empty { color:#68727c; }
         </style>
     </head>
     <body><main>
         <h1>WebStrike Scan History</h1>
-        <p><a href="/">← Back to scanner</a></p>
+        <p><a href="/">Back to scanner</a></p>
         <section>
         {% if rows %}
             {% for row in rows %}
                 <div class="entry">
-                    <strong>{{ row["website"] }}</strong>
-                    <p>{{ row["website_status"] }} · {{ row["https_status"] }}</p>
-                    <span class="muted">{{ row["scanned_at"] }}</span>
+                    <strong>{{ row["website"] }}</strong><br>
+                    Website status: {{ row["website_status"] }}<br>
+                    HTTPS status: {{ row["https_status"] }}<br>
+                    <span class="muted">Scanned at: {{ row["scanned_at"] }}</span>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No scan history yet. Run your first website check.</p>
+            <p class="empty">No scan history yet. Run your first website check.</p>
         {% endif %}
         </section>
     </main></body></html>
-    """
+"""
     return render_template_string(history_page, rows=rows)
 
 
