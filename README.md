@@ -4,35 +4,50 @@ A simple student project that checks basic website security details using Python
 
 ## Quick navigation
 
-| If you want to... | Open this file |
+| What you want to change or understand | Open this file |
 |---|---|
-| See the complete application and change its features | [app.py](app.py) |
-| See which Python packages are required | [requirements.txt](requirements.txt) |
-| Check the basic project tests | [test_app.py](test_app.py) |
-| Understand or run the project | [README.md](README.md) |
+| Website scan logic, Flask routes and database | [app.py](app.py) |
+| Main page headings and dashboard content | [templates/index.html](templates/index.html) |
+| History page headings and layout | [templates/history.html](templates/history.html) |
+| All dashboard colours, fonts, spacing and visual design | [static/css/style.css](static/css/style.css) |
+| Python packages | [requirements.txt](requirements.txt) |
+| Basic project tests | [test_app.py](test_app.py) |
 
-## Project files (easy order)
+## Project structure (recommended reading order)
 
 ```text
-sitecheck/
-├── app.py            # 1. Main application, scanner and web pages
-├── requirements.txt  # 2. Python packages needed by the app
-├── test_app.py       # 3. Basic tests for important features
-├── README.md         # 4. Project guide and instructions
-└── .gitignore        # 5. Keeps temporary files out of GitHub
+webstrike/
+├── app.py                  # 1. Application logic and website checks
+├── templates/
+│   ├── index.html          # 2. Main page headings and dashboard content
+│   └── history.html        # 3. Scan history headings and layout
+├── static/
+│   └── css/
+│       └── style.css       # 4. Colours and visual design
+├── requirements.txt        # 5. Required Python packages
+├── test_app.py             # 6. Basic tests
+├── README.md               # 7. Project guide
+└── .gitignore              # Keeps temporary files out of GitHub
 ```
 
-GitHub displays files in its own alphabetical order. The numbered list above is the recommended order to understand the project.
+GitHub sorts files alphabetically. This guide gives you a simple order to understand and edit the project.
 
-The `webstrike.db` database is created automatically when scans are saved. It is local application data and should not be uploaded to GitHub.
+## Where to make common changes
 
-## What each file does
+- **Change colours, fonts or spacing:** edit `static/css/style.css`. Look for the `:root` colour variables near the top.
+- **Change the main page title, headings or text:** edit `templates/index.html`.
+- **Change Scan History headings or text:** edit `templates/history.html`.
+- **Add or change a scan feature or URL route:** edit `app.py`.
+- **Add a Python package:** update `requirements.txt`.
 
-- **app.py:** Contains the Flask application, website checks, dashboard, scan history and delete-scan route.
-- **requirements.txt:** Lists the Python packages required by the application.
-- **test_app.py:** Contains basic tests for input validation and page routes.
-- **README.md:** Explains the project and how to use it.
-- **.gitignore:** Prevents temporary files and the local database from being committed.
+## What each part does
+
+- **app.py:** Flask routes, website checks, certificate checks, SQLite history and delete action.
+- **templates/index.html:** scanner dashboard and scan result layout.
+- **templates/history.html:** saved scan list and delete buttons.
+- **static/css/style.css:** dashboard appearance.
+- **requirements.txt:** Python packages.
+- **test_app.py:** basic tests for input validation and page routes.
 
 ## Main features
 
@@ -43,31 +58,23 @@ The `webstrike.db` database is created automatically when scans are saved. It is
 5. Saves scan records in SQLite.
 6. Displays the latest scan and recent scan history.
 7. Allows an individual history record to be deleted.
-8. Uses a clean dashboard with a simple animated radar graphic.
+8. Uses a responsive dashboard with an animated radar graphic.
 9. Checks for a free local port when the preferred port is occupied.
 
 ## Run the project
 
 1. Install Python 3.
 2. Open a terminal in the project folder.
-3. Install the required packages:
-
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
-
-4. Start the application:
-
-   ```bash
-   python app.py
-   ```
-
+3. Install packages: `python -m pip install -r requirements.txt`
+4. Start the app: `python app.py`
 5. Open the local address printed in the terminal.
-6. Enter a public website and click **Check Website**. Open **Scan History** to view or delete saved records.
+6. Enter a public website and click **Check Website**.
 
-## Simple explanation for a project review
+The local database file is created automatically when scans are saved. It should not be uploaded to GitHub.
 
-SiteCheck is a basic website security checker. The user enters a public website and clicks the check button. Python checks the website response, HTTPS certificate and selected security headers. Flask displays the results, and SQLite stores the scan history.
+## Simple project-review explanation
+
+SiteCheck is a basic website security checker. A user enters a public website and clicks the check button. Python checks the website response, HTTPS certificate and selected security headers. Flask displays the results, and SQLite stores scan history.
 
 ## Limitations and safe use
 
@@ -75,8 +82,8 @@ SiteCheck is a basic website security checker. The user enters a public website 
 - Only check public websites you are allowed to assess.
 - A missing header does not automatically mean a website is vulnerable.
 - A valid HTTPS certificate does not prove that a website is trustworthy.
-- Scan history is stored in the local `webstrike.db` database.
+- Scan history is stored in a local SQLite database.
 
 ## Topics demonstrated
 
-Python functions, Flask routes, HTTP requests, HTTPS/TLS, response headers, input validation and SQLite.
+Python functions, Flask routes, HTML templates, CSS, HTTP requests, HTTPS/TLS, response headers, input validation and SQLite.
