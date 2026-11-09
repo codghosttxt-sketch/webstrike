@@ -6,6 +6,8 @@ import sqlite3
 import ipaddress
 from urllib.parse import urlparse
 from datetime import datetime
+import os
+import psutil
 
 app = Flask(__name__)
 DATABASE = "webstrike.db"
@@ -376,5 +378,74 @@ def history():
     return render_template_string(history_page, rows=rows)
 
 
+def port_is_available(port):
+    """Check whether WebStrike can use this local port."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as test_socket:
+            test_socket.bind(("127.0.0.1", port))
+        return True
+    except OSError:
+        return False
+
+
+def stop_previous_webstrike(port):
+    """Stop only an older process running this exact app.py on the chosen port."""
+    app_file = os.path.realpath(__file__)
+
+    try:
+        connections = psutil.net_connections(kind="inet")
+    except (psutil.AccessDenied, OSError):
+        return False
+
+    for connection in connections:
+        if connection.laddr and connection.laddr.port == port and connection.status == psutil.CONN_LISTEN and connection.pid:
+            try:
+                process = psutil.Process(connection.pid)
+                command = process.cmdline()
+                is_this_app = any(
+                    argument.lower().endswith("app.py")
+                    and os.path.realpath(argument) == app_file
+                    for argument in command
+                )
+
+                if is_this_app:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=3)
+                    except psutil.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=3)
+                    print("Stopped the previous WebStrike process.")
+                    return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                continue
+
+    return False
+
+
+def get_available_port(start_port):
+    """Use the requested port, or the next free port if another app owns it."""
+    if port_is_available(start_port):
+        return start_port
+
+    for port in range(start_port + 1, start_port + 11):
+        if port_is_available(port):
+            print(
+                f"Port {start_port} is being used by another application. "
+                f"WebStrike will use port {port} instead."
+            )
+            return port
+
+    raise RuntimeError("No free port found between the requested port and the next 10 ports.")
+
+
 if __name__ == "__main__":
-    app.run(debug=False)
+    preferred_port = int(os.environ.get("PORT", "5000"))
+
+    # First try to stop an older copy of this same WebStrike app.
+    stop_previous_webstrike(preferred_port)
+
+    # Never terminate an unrelated application just because it uses the port.
+    app_port = get_available_port(preferred_port)
+    print(f"WebStrike is available at http://127.0.0.1:{app_port}")
+    app.run(host="127.0.0.1", port=app_port, debug=False)
