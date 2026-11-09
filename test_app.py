@@ -33,7 +33,7 @@ class WebStrikePageTests(unittest.TestCase):
     def test_home_page_loads(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"WebStrike", response.data)
+        self.assertIn(b"SiteCheck", response.data)
 
     def test_home_page_shows_manual_check_and_last_scan_section(self):
         response = self.client.get("/")
@@ -44,7 +44,7 @@ class WebStrikePageTests(unittest.TestCase):
     def test_history_page_loads_before_first_scan(self):
         response = self.client.get("/history")
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"WebStrike Scan History", response.data)
+        self.assertIn(b"Scan History", response.data)
 
 
 if __name__ == "__main__":
