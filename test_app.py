@@ -3,13 +3,13 @@ import unittest
 from app import app, scan_website
 
 
-class SiteCheckInputTests(unittest.TestCase):
+class WebStrikeInputTests(unittest.TestCase):
     def test_empty_address_is_rejected(self):
         with self.assertRaises(ValueError):
             scan_website("")
 
     def test_unsupported_protocol_is_rejected(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "Only HTTP and HTTPS"):
             scan_website("ftp://example.com")
 
     def test_embedded_credentials_are_rejected(self):
@@ -25,7 +25,7 @@ class SiteCheckInputTests(unittest.TestCase):
             scan_website("a" * 2049)
 
 
-class SiteCheckPageTests(unittest.TestCase):
+class WebStrikePageTests(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
         self.client = app.test_client()
@@ -33,7 +33,7 @@ class SiteCheckPageTests(unittest.TestCase):
     def test_home_page_loads(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"SiteCheck", response.data)
+        self.assertIn(b"WebStrike", response.data)
 
     def test_home_page_shows_manual_check_and_last_scan_section(self):
         response = self.client.get("/")
