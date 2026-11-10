@@ -1,4 +1,4 @@
-# SiteCheck
+# WebStrike
 
 A simple student project that checks basic website security details using Python and Flask.
 
@@ -67,14 +67,14 @@ GitHub sorts files alphabetically. This guide gives you a simple order to unders
 2. Open a terminal in the project folder.
 3. Install packages: `python -m pip install -r requirements.txt`
 4. Start the app: `python app.py`
-5. Open the local address printed in the terminal.
+5. In GitHub Codespaces, open the **Ports** tab and open the forwarded port (usually 5000).
 6. Enter a public website and click **Check Website**.
 
 The local database file is created automatically when scans are saved. It should not be uploaded to GitHub.
 
 ## Simple project-review explanation
 
-SiteCheck is a basic website security checker. A user enters a public website and clicks the check button. Python checks the website response, HTTPS certificate and selected security headers. Flask displays the results, and SQLite stores scan history.
+WebStrike is a basic website security checker. A user enters a public website and clicks the check button. Python checks the website response, HTTPS certificate and selected security headers. Flask displays the results, and SQLite stores scan history.
 
 ## Limitations and safe use
 
