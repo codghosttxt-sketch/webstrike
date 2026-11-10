@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebStrike | Scan History</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
-    <body><main><p class="muted">WEBSTRIKE / ACTIVITY LOG</p><h1>Scan History</h1><p><a class="back" href="/">← Back to scanner</a></p><section>
+    <body><main><p class="muted">WEBSTRIKE / ACTIVITY LOG</p><h1>WebStrike Scan History</h1><p><a class="back" href="/">← Back to scanner</a></p><section>
     {% if rows %}{% for row in rows %}<div class="entry"><div class="entry-top"><div><strong>{{ row["website"] }}</strong><br>Website status: {{ row["website_status"] }}<br>HTTPS status: {{ row["https_status"] }}<br><span class="muted">Scanned at: {{ row["scanned_at"] }}</span></div><form method="POST" action="/delete/{{ row['id'] }}" onsubmit="return confirm('Delete this scan record?')"><button class="delete-btn" type="submit">Delete</button></form></div></div>{% endfor %}{% else %}<p class="empty">No scan history yet. Run your first website check.</p>{% endif %}
     </section></main></body></html>
