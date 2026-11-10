@@ -67,8 +67,10 @@ GitHub sorts files alphabetically. This guide gives you a simple order to unders
 2. Open a terminal in the project folder.
 3. Install packages: `python -m pip install -r requirements.txt`
 4. Start the app: `python app.py`
-5. In GitHub Codespaces, open the **Ports** tab and open the forwarded port (usually 5000).
+5. On a normal computer, WebStrike opens in your default browser automatically. In GitHub Codespaces, the forwarded port is configured to open in the browser when the app starts.
 6. Enter a public website and click **Check Website**.
+
+To stop automatic browser opening on a normal computer, set `WEBSTRIKE_NO_BROWSER=1` before starting the app. The app never opens a browser from inside Codespaces; Codespaces handles its forwarded-port link.
 
 The local database file is created automatically when scans are saved. It should not be uploaded to GitHub.
 
