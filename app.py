@@ -8,6 +8,8 @@ from urllib.parse import urlparse
 from datetime import datetime
 import os
 import psutil
+import threading
+import webbrowser
 
 app = Flask(__name__)
 DATABASE = "webstrike.db"
@@ -245,7 +247,7 @@ def history():
 
 
 def port_is_available(port):
-    """Check whether SiteCheck can use this local port."""
+    """Check whether WebStrike can use this local port."""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as test_socket:
             test_socket.bind(("127.0.0.1", port))
@@ -281,7 +283,7 @@ def stop_previous_webstrike(port):
                     except psutil.TimeoutExpired:
                         process.kill()
                         process.wait(timeout=3)
-                    print("Stopped the previous SiteCheck process.")
+                    print("Stopped the previous WebStrike process.")
                     return True
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                 continue
@@ -298,20 +300,47 @@ def get_available_port(start_port):
         if port_is_available(port):
             print(
                 f"Port {start_port} is being used by another application. "
-                f"SiteCheck will use port {port} instead."
+                f"WebStrike will use port {port} instead."
             )
             return port
 
     raise RuntimeError("No free port found between the requested port and the next 10 ports.")
 
 
+def open_local_browser(port):
+    """Open WebStrike automatically on a normal local computer.
+
+    GitHub Codespaces opens forwarded ports through .devcontainer/devcontainer.json,
+    so this helper intentionally does nothing inside Codespaces.
+    """
+    if os.environ.get("CODESPACES") or os.environ.get("WEBSTRIKE_NO_BROWSER") == "1":
+        return
+
+    def open_page():
+        try:
+            webbrowser.open(f"http://127.0.0.1:{port}", new=2)
+        except Exception as error:
+            print(f"Browser could not be opened automatically: {error}")
+
+    timer = threading.Timer(1.5, open_page)
+    timer.daemon = True
+    timer.start()
+
+
 if __name__ == "__main__":
     preferred_port = int(os.environ.get("PORT", "5000"))
 
-    # First try to stop an older copy of this same SiteCheck app.
+    # Stop only an older copy of this exact WebStrike app.
     stop_previous_webstrike(preferred_port)
 
     # Never terminate an unrelated application just because it uses the port.
     app_port = get_available_port(preferred_port)
-    print(f"WebStrike is running on port {app_port}. Open the forwarded port in Codespaces.")
+    app_url = f"http://127.0.0.1:{app_port}"
+    print(f"WebStrike is running at {app_url}")
+
+    if os.environ.get("CODESPACES"):
+        print("Codespaces will open the forwarded WebStrike port automatically.")
+    else:
+        open_local_browser(app_port)
+
     app.run(host="0.0.0.0", port=app_port, debug=False)
