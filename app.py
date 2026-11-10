@@ -68,6 +68,9 @@ def scan_website(user_url):
         raise ValueError("Please enter a website address.")
     if len(user_url) > 2048:
         raise ValueError("Website address is too long.")
+    # Reject an explicitly supplied unsupported protocol instead of treating it as a hostname.
+    if "://" in user_url and not user_url.startswith(("http://", "https://")):
+        raise ValueError("Only HTTP and HTTPS website addresses are supported.")
     if not user_url.startswith(("http://", "https://")):
         user_url = "https://" + user_url
 
@@ -104,7 +107,7 @@ def scan_website(user_url):
             allow_redirects=False,
             verify=True,
             stream=True,
-            headers={"User-Agent": "SiteCheck-Educational-Checker/1.0"}
+            headers={"User-Agent": "WebStrike-Educational-Checker/1.0"}
         ) as response:
             website_status = "Reachable"
             http_code = str(response.status_code)
@@ -310,5 +313,5 @@ if __name__ == "__main__":
 
     # Never terminate an unrelated application just because it uses the port.
     app_port = get_available_port(preferred_port)
-    print(f"SiteCheck is available at http://127.0.0.1:{app_port}")
-    app.run(host="127.0.0.1", port=app_port, debug=False)
+    print(f"WebStrike is running on port {app_port}. Open the forwarded port in Codespaces.")
+    app.run(host="0.0.0.0", port=app_port, debug=False)
