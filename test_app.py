@@ -30,25 +30,26 @@ class WebStrikePageTests(unittest.TestCase):
         app.config["TESTING"] = True
         self.client = app.test_client()
 
-    def test_home_page_loads_without_home_navigation_or_pikachu(self):
+    def test_dashboard_loads_without_top_home_or_scanner_navigation(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"WebStrike", response.data)
+        self.assertIn(b"Check a website", response.data)
         self.assertNotIn(b">Home<", response.data)
+        self.assertNotIn(b">Scanner<", response.data)
         self.assertNotIn(b"Pikachu", response.data)
 
-    def test_scan_button_and_last_scan_section_remain_available(self):
+    def test_latest_scan_and_history_link_are_available(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Check Website", response.data)
-        self.assertIn(b"Last Scan", response.data)
+        self.assertIn(b"Latest scan", response.data)
+        self.assertIn(b"View scan history", response.data)
 
-    def test_history_page_loads_without_back_or_home_button(self):
+    def test_history_page_loads(self):
         response = self.client.get("/history")
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"WebStrike Scan History", response.data)
-        self.assertNotIn(b"Back to scanner", response.data)
-        self.assertNotIn(b">Home<", response.data)
+        self.assertIn(b"Scan history", response.data)
+        self.assertIn(b"Return to dashboard", response.data)
 
 
 if __name__ == "__main__":
