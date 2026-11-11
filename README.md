@@ -38,7 +38,17 @@ webstrike/
 
 **Change colours:** Open `static/css/style.css` and edit the variables at the top under `:root`, such as `--accent`, `--page` and `--text`.
 
-**Change a heading or button label:** Open the relevant HTML template and edit its text. Keep the HTML tags and form names unchanged unless you also update the Flask route.
+**Change a heading or button label:** Open the relevant HTML template and edit its text. Keep the HTML tags, `name="website"`, form actions (`/scan`, `/delete/...`) and Jinja template markers (`{% ... %}` / `{{ ... }}`) unchanged unless you also update the Flask route. For a visual-only change, edit CSS instead of Python.
+
+## Safe change process (use this before showing the project)
+
+1. Change one small thing at a time.
+2. Save the file.
+3. Run `python -m py_compile app.py test_app.py && python -m unittest discover -v` in the terminal.
+4. If every test passes, start the app with `bash run.sh` and check the page in the forwarded port.
+5. Commit the change only after the page works.
+
+The automated GitHub Actions checks run the same syntax and unit tests whenever you push a commit or open a pull request. These checks catch many mistakes, but always open the website and test the feature you changed too.
 
 ## Run in GitHub Codespaces
 
