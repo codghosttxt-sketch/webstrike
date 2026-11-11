@@ -342,7 +342,7 @@ def open_local_browser(port):
 
 
 if __name__ == "__main__":
-    preferred_port = int(os.environ.get("PORT", "5000"))
+    preferred_port = int(os.environ.get("PORT", "8000"))
 
     # Stop only an older copy of this exact WebStrike app.
     stop_previous_webstrike(preferred_port)
@@ -350,11 +350,11 @@ if __name__ == "__main__":
     # Never terminate an unrelated application just because it uses the port.
     app_port = get_available_port(preferred_port)
     app_url = f"http://127.0.0.1:{app_port}"
-    print(f"WebStrike is running at {app_url}")
+    print(f"\nWebStrike is running at {app_url}", flush=True)\n    print(f"Codespaces: open forwarded port {app_port} in the PORTS tab.", flush=True)\n    print("Leave this terminal running. Do not type the status messages as commands.\\n", flush=True)
 
     if os.environ.get("CODESPACES"):
         print("Codespaces will open the forwarded WebStrike port automatically.")
     else:
         open_local_browser(app_port)
 
-    app.run(host="0.0.0.0", port=app_port, debug=False)
+    app.run(host="0.0.0.0", port=app_port, debug=False, use_reloader=False, threaded=True)
