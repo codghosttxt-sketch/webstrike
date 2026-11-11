@@ -350,7 +350,10 @@ if __name__ == "__main__":
     # Never terminate an unrelated application just because it uses the port.
     app_port = get_available_port(preferred_port)
     app_url = f"http://127.0.0.1:{app_port}"
-    print(f"\nWebStrike is running at {app_url}", flush=True)\n    print(f"Codespaces: open forwarded port {app_port} in the PORTS tab.", flush=True)\n    print("Leave this terminal running. Do not type the status messages as commands.\\n", flush=True)
+    print(f"\nWebStrike is running at {app_url}", flush=True)
+    print(f"Codespaces: open forwarded port {app_port} in the PORTS tab.", flush=True)
+    print("Leave this terminal running. Do not type the status messages as commands.", flush=True)
+    print()
 
     if os.environ.get("CODESPACES"):
         print("Codespaces will open the forwarded WebStrike port automatically.")
