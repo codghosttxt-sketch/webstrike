@@ -1,82 +1,80 @@
 # WebStrike
 
-A beginner-friendly website security checker built with Python and Flask.
+WebStrike is a small educational website security checker built with Python and Flask. It checks public website availability, HTTPS certificate information and selected HTTP security headers.
 
 ## Project structure
 
 ```text
 webstrike/
-├── app.py                  # Flask routes, scan logic and database
+├── app.py
+├── run.sh
+├── requirements.txt
+├── test_app.py
+├── README.md
+├── .gitignore
 ├── templates/
-│   ├── index.html          # Main dashboard and scan results
-│   └── history.html        # Saved scan history
+│   ├── index.html
+│   └── history.html
 ├── static/
 │   └── css/
-│       └── style.css       # Website design and responsive layout
+│       └── style.css
 ├── .devcontainer/
-│   └── devcontainer.json   # GitHub Codespaces port settings
-├── .github/
-│   └── workflows/
-│       └── tests.yml       # Automatic checks on GitHub
-├── requirements.txt        # Python dependencies
-├── test_app.py             # Project tests
-├── run.sh                  # One-command setup and start
-├── README.md               # Project guide
-└── .gitignore              # Files that should stay out of Git
+│   └── devcontainer.json
+└── .github/
+    └── workflows/
+        └── tests.yml
 ```
 
-## Where to make changes
+## Where to edit
 
-| Change | File |
+| If you need to change... | Edit this file |
 |---|---|
-| Scan logic, validation or Flask routes | `app.py` |
-| Main page text, headings or scan form | `templates/index.html` |
-| Scan history layout or text | `templates/history.html` |
-| Colours, fonts, spacing or responsive design | `static/css/style.css` |
-| Add or update Python packages | `requirements.txt` |
-| Add or update tests | `test_app.py` |
+| Website scan logic or validation | `app.py` |
+| Main page headings, labels or buttons | `templates/index.html` |
+| Scan history page | `templates/history.html` |
+| Colours, spacing, fonts or layout | `static/css/style.css` |
+| Python packages | `requirements.txt` |
+| Automated checks | `test_app.py` |
 
-The main website does not need a Home navigation button. Use the browser's Back button if you need to return from Scan History.
+**Change colours:** Open `static/css/style.css` and edit the variables at the top under `:root`, such as `--accent`, `--page` and `--text`.
+
+**Change a heading or button label:** Open the relevant HTML template and edit its text. Keep the HTML tags and form names unchanged unless you also update the Flask route.
 
 ## Run in GitHub Codespaces
 
-After opening the repository in Codespaces, run:
+Run this command in the terminal:
 
 ```bash
 bash run.sh
 ```
 
-The script installs dependencies, checks Python syntax, runs the tests and starts the Flask website on port 8000 by default. If that port is occupied, WebStrike checks the next ten ports. Keep the terminal running and open the port shown in the terminal from the **Ports** tab. Do not type the server status messages as commands.
+The script installs dependencies, checks Python syntax, runs unit tests and starts the website. Port 8000 is preferred; if it is busy, the application checks the next ten ports. Keep the terminal open. In the **PORTS** tab, open the port printed by the application.
 
-To pull the latest GitHub changes and start in one terminal line:
+To update your workspace first while preserving local changes:
 
 ```bash
-git pull --ff-only origin main && bash run.sh
+git stash push -u -m "Save local WebStrike workspace changes" && git pull --ff-only origin main && bash run.sh
 ```
 
 ## Features
 
 1. Checks whether a public website responds.
-2. Displays its HTTP response code.
-3. Checks HTTPS and the TLS certificate.
+2. Shows its HTTP response code.
+3. Checks HTTPS and TLS certificate information.
 4. Checks four common security headers.
-5. Saves scan records in a local SQLite database.
-6. Displays the latest scan and scan history.
+5. Saves scan history in a local SQLite database.
+6. Shows the latest scan and scan history.
 7. Allows an individual history record to be deleted.
-8. Uses a responsive dashboard.
+8. Uses a responsive layout.
 
 ## How it works
 
-The user enters a public website address and selects **Check Website**. Flask sends a normal HTTPS/HTTP request. Python checks the response, certificate and selected security headers. The results are displayed on the page and saved in SQLite.
+The browser sends the entered website address to a Flask route. Python validates the address and checks that it resolves to a public IP address. The application makes a normal web request, reads the response headers and checks the TLS certificate. Flask sends the results to the HTML template, and SQLite stores a scan-history record.
 
-## Safe-use notes and limitations
+## Limitations and safe use
 
 - This is an educational checker, not a full vulnerability scanner.
 - Only check public websites you are allowed to assess.
-- A missing header does not automatically mean a website is vulnerable.
-- A valid HTTPS certificate does not prove that a website is trustworthy.
-- The SQLite database is created locally when the first scan is saved. It is excluded from Git.
-
-## Topics demonstrated
-
-Python, Flask, HTML, CSS, HTTP, HTTPS/TLS, response headers, input validation, SQLite and automated testing.
+- A missing security header is not automatically proof of a vulnerability.
+- A valid TLS certificate does not prove that a website is trustworthy.
+- Scan history is stored in the local `webstrike.db` file and is not committed to Git.
