@@ -1,8 +1,8 @@
 {
   "name": "WebStrike",
-  "forwardPorts": [5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010],
+  "forwardPorts": [8000],
   "portsAttributes": {
-    "5000-5010": {
+    "8000": {
       "label": "WebStrike website",
       "onAutoForward": "openBrowser"
     }
