@@ -256,39 +256,53 @@ def port_is_available(port):
         return False
 
 
-def stop_previous_webstrike(port):
-    """Stop only an older process running this exact app.py on the chosen port."""
+def stop_previous_webstrike(start_port):
+    """Stop older copies of this exact app on WebStrike's forwarded ports."""
     app_file = os.path.realpath(__file__)
+    webstrike_ports = set(range(start_port, start_port + 11))
+    stopped = False
 
     try:
         connections = psutil.net_connections(kind="inet")
     except (psutil.AccessDenied, OSError):
+        print("Could not inspect existing processes; leaving them untouched.")
         return False
 
+    checked_pids = set()
     for connection in connections:
-        if connection.laddr and connection.laddr.port == port and connection.status == psutil.CONN_LISTEN and connection.pid:
-            try:
-                process = psutil.Process(connection.pid)
-                command = process.cmdline()
-                is_this_app = any(
-                    argument.lower().endswith("app.py")
-                    and os.path.realpath(argument) == app_file
-                    for argument in command
-                )
+        if (
+            not connection.laddr
+            or connection.laddr.port not in webstrike_ports
+            or connection.status != psutil.CONN_LISTEN
+            or not connection.pid
+            or connection.pid in checked_pids
+        ):
+            continue
 
-                if is_this_app:
-                    process.terminate()
-                    try:
-                        process.wait(timeout=3)
-                    except psutil.TimeoutExpired:
-                        process.kill()
-                        process.wait(timeout=3)
-                    print("Stopped the previous WebStrike process.")
-                    return True
-            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                continue
+        checked_pids.add(connection.pid)
+        try:
+            process = psutil.Process(connection.pid)
+            command = process.cmdline()
+            is_this_app = any(
+                argument.lower().endswith("app.py")
+                and os.path.realpath(argument) == app_file
+                for argument in command
+            )
 
-    return False
+            if is_this_app and process.pid != os.getpid():
+                process.terminate()
+                try:
+                    process.wait(timeout=3)
+                except psutil.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=3)
+                stopped = True
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            continue
+
+    if stopped:
+        print("Stopped the previous WebStrike instance.")
+    return stopped
 
 
 def get_available_port(start_port):
