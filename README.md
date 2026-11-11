@@ -46,7 +46,7 @@ After opening the repository in Codespaces, run:
 bash run.sh
 ```
 
-The script installs dependencies, checks Python syntax, runs the tests and starts the Flask website. Keep the terminal running. Open the forwarded WebStrike port from the **Ports** tab.
+The script installs dependencies, checks Python syntax, runs the tests and starts the Flask website on port 8000 by default. If that port is occupied, WebStrike checks the next ten ports. Keep the terminal running and open the port shown in the terminal from the **Ports** tab. Do not type the server status messages as commands.
 
 To pull the latest GitHub changes and start in one terminal line:
 
