@@ -58,7 +58,7 @@ Run this command in the terminal:
 bash run.sh
 ```
 
-The script installs dependencies, checks Python syntax, runs unit tests and starts the website. Port 8000 is preferred; if it is busy, the application checks the next ten ports. Keep the terminal open. In the **PORTS** tab, open the port printed by the application.
+The script installs dependencies, checks Python syntax, runs unit tests and starts the website on port 8000 only. The Codespaces configuration forwards only port 8000. If port 8000 is already in use, stop the previous WebStrike server in its terminal and run the command again; WebStrike will not create extra ports.
 
 To update your workspace first while preserving local changes:
 
