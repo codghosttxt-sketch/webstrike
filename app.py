@@ -259,7 +259,7 @@ def port_is_available(port):
 def stop_previous_webstrike(start_port):
     """Stop older copies of this exact app on WebStrike's forwarded ports."""
     app_file = os.path.realpath(__file__)
-    webstrike_ports = set(range(start_port, start_port + 11))
+    webstrike_ports = {start_port}
     stopped = False
 
     try:
@@ -306,19 +306,13 @@ def stop_previous_webstrike(start_port):
 
 
 def get_available_port(start_port):
-    """Use the requested port, or the next free port if another app owns it."""
+    """Use only the configured WebStrike port; never create extra ports."""
     if port_is_available(start_port):
         return start_port
-
-    for port in range(start_port + 1, start_port + 11):
-        if port_is_available(port):
-            print(
-                f"Port {start_port} is being used by another application. "
-                f"WebStrike will use port {port} instead."
-            )
-            return port
-
-    raise RuntimeError("No free port found between the requested port and the next 10 ports.")
+    raise RuntimeError(
+        f"Port {start_port} is already in use. Stop the existing WebStrike "
+        "server from its terminal, then run bash run.sh again."
+    )
 
 
 def open_local_browser(port):
